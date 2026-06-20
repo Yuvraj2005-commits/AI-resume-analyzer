@@ -1,35 +1,60 @@
-import Link from "next/link";
-async function getHistory() {
-  const res = await fetch("http://localhost:3000/api/history", {
-    cache: "no-store",
-  });
-
-  return res.json();
-}
+import Analysis from "@/models/Analysis";
+import { connectDB } from "@/lib/mongodb";
 
 export default async function HistoryPage() {
-  const data = await getHistory();
+  await connectDB();
+
+  const analyses = await Analysis.find()
+    .sort({ createdAt: -1 })
+    .lean();
 
   return (
-    <div className="p-10">
-      <h1 className="text-3xl font-bold mb-6">Analysis History</h1>
+    <div className="min-h-screen bg-black text-white p-10">
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-5xl font-bold mb-2">
+          Analysis History
+        </h1>
 
-      {data.map((item: any) => (
-        <div key={item._id} className="border rounded-xl p-4 mb-4">
-          <h2 className="text-xl font-bold">ATS Score: {item.atsScore}</h2>
+        <p className="text-gray-400 mb-10">
+          Track all your ATS reports and resume improvements.
+        </p>
 
-          <p className="text-gray-400">
-            {new Date(item.createdAt).toLocaleString()}
-          </p>
+        <div className="space-y-6">
+          {analyses.map((item: any) => (
+            <div
+              key={item._id}
+              className="rounded-3xl border border-white/10 bg-[#111118] p-6 hover:border-violet-500/50 transition"
+            >
+              <div className="flex justify-between items-center">
+                <div>
+                  <h2 className="text-3xl font-bold">
+                    ATS {item.atsScore}
+                  </h2>
 
-          <Link
-            href={`/analysis/${item._id}`}
-            className="text-blue-500 mt-2 inline-block"
-          >
-            View Full Report →
-          </Link>
+                  <p className="text-gray-400">
+                    {new Date(
+                      item.createdAt
+                    ).toLocaleString()}
+                  </p>
+                </div>
+
+                <div
+                  className={`
+                  px-4 py-2 rounded-full font-semibold
+                  ${
+                    item.atsScore >= 80
+                      ? "bg-green-500/20 text-green-400"
+                      : "bg-yellow-500/20 text-yellow-400"
+                  }
+                `}
+                >
+                  {item.jobMatch}% Match
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
     </div>
   );
 }

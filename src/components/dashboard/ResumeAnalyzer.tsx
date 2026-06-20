@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import AnalysisResult from "./AnalysisResult";
+import { Sparkles, FileText, Wand2 } from "lucide-react";
 
 export default function ResumeAnalyzer() {
   const [resumeText, setResumeText] = useState("");
@@ -30,7 +31,6 @@ export default function ResumeAnalyzer() {
 
       const data = await res.json();
 
-      console.log("API RESPONSE:");
       console.log(data);
 
       setResult(data);
@@ -67,14 +67,30 @@ export default function ResumeAnalyzer() {
   }
 
   return (
-    <div className="border rounded-xl p-6 mt-8">
-      <h2 className="text-3xl font-bold mb-6">
-        AI Resume Analyzer & Job Matcher
-      </h2>
+    <div className="rounded-3xl border border-white/10 bg-[#111118] p-8">
 
-      {/* Resume Input */}
-      <div className="mb-6">
-        <label className="block mb-2 font-medium">
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-violet-600 to-cyan-500 flex items-center justify-center">
+          <Sparkles className="w-6 h-6 text-white" />
+        </div>
+
+        <div>
+          <h2 className="text-4xl font-bold text-white">
+            AI Resume Analyzer
+          </h2>
+
+          <p className="text-gray-400 mt-1">
+            Analyze resumes, compare job descriptions,
+            improve ATS scores and generate optimized resumes using Gemini AI.
+          </p>
+        </div>
+      </div>
+
+      {/* Resume Section */}
+      <div className="mb-8">
+        <label className="flex items-center gap-2 mb-3 font-semibold text-white">
+          <FileText size={18} />
           Resume
         </label>
 
@@ -82,13 +98,14 @@ export default function ResumeAnalyzer() {
           value={resumeText}
           onChange={(e) => setResumeText(e.target.value)}
           placeholder="Paste your resume here..."
-          className="w-full h-64 border rounded-lg p-4 text-black"
+          className="w-full h-64 rounded-2xl border border-white/10 bg-black/50 p-5 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500"
         />
       </div>
 
       {/* Job Description */}
-      <div className="mb-6">
-        <label className="block mb-2 font-medium">
+      <div className="mb-8">
+        <label className="flex items-center gap-2 mb-3 font-semibold text-white">
+          <Wand2 size={18} />
           Job Description
         </label>
 
@@ -96,16 +113,17 @@ export default function ResumeAnalyzer() {
           value={jobDescription}
           onChange={(e) => setJobDescription(e.target.value)}
           placeholder="Paste job description here..."
-          className="w-full h-48 border rounded-lg p-4 text-black"
+          className="w-full h-52 rounded-2xl border border-white/10 bg-black/50 p-5 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
         />
       </div>
 
       {/* Buttons */}
-      <div className="flex gap-4">
+      <div className="flex flex-wrap gap-4">
+
         <button
           onClick={analyzeResume}
           disabled={loading}
-          className="bg-white text-black px-5 py-2 rounded-lg font-semibold"
+          className="rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 px-6 py-3 font-semibold text-white hover:scale-105 transition-all duration-300 disabled:opacity-50"
         >
           {loading ? "Analyzing..." : "Analyze Resume"}
         </button>
@@ -113,33 +131,34 @@ export default function ResumeAnalyzer() {
         <button
           onClick={improveResume}
           disabled={rewriting}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-semibold"
+          className="rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 px-6 py-3 font-semibold text-white hover:scale-105 transition-all duration-300 disabled:opacity-50"
         >
-          {rewriting
-            ? "Improving..."
-            : "Improve Resume"}
+          {rewriting ? "Improving..." : "Improve Resume"}
         </button>
+
       </div>
 
-      {/* Analysis Result */}
+      {/* Analysis Results */}
       {result && (
-        <div className="mt-8">
+        <div className="mt-10">
           <AnalysisResult result={result} />
         </div>
       )}
 
       {/* Improved Resume */}
       {improvedResume && (
-        <div className="border rounded-xl p-6 mt-8">
-          <h2 className="text-2xl font-bold mb-4">
-            Improved Resume
+        <div className="mt-10 rounded-3xl border border-cyan-500/20 bg-black/40 p-6">
+
+          <h2 className="text-2xl font-bold mb-4 text-cyan-400">
+            ✨ Improved Resume
           </h2>
 
-          <div className="bg-gray-900 rounded-lg p-4 overflow-auto">
-            <pre className="whitespace-pre-wrap text-sm">
+          <div className="rounded-2xl bg-black/60 border border-white/10 p-5 max-h-[500px] overflow-y-auto">
+            <pre className="whitespace-pre-wrap text-gray-300 text-sm">
               {improvedResume}
             </pre>
           </div>
+
         </div>
       )}
     </div>
