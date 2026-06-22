@@ -6,7 +6,7 @@ import LoginButton from "@/components/LoginButton";
 export default function Home() {
   return (
     <main className="min-h-screen bg-black text-white">
-       <Navbar />
+       {/* <Navbar /> */}
 
       <nav className="border-b border-zinc-800">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
