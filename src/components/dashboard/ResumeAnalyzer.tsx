@@ -4,7 +4,6 @@ import { useState } from "react";
 import AnalysisResult from "./AnalysisResult";
 import { Sparkles, FileText, Wand2 } from "lucide-react";
 
-
 export default function ResumeAnalyzer() {
   const [resumeText, setResumeText] = useState("");
   const [jobDescription, setJobDescription] = useState("");
@@ -69,7 +68,6 @@ export default function ResumeAnalyzer() {
 
   return (
     <div className="rounded-3xl border border-white/10 bg-[#111118] p-8">
-
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
         <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-violet-600 to-cyan-500 flex items-center justify-center">
@@ -77,13 +75,11 @@ export default function ResumeAnalyzer() {
         </div>
 
         <div>
-          <h2 className="text-4xl font-bold text-white">
-            AI Resume Analyzer
-          </h2>
+          <h2 className="text-4xl font-bold text-white">AI Resume Analyzer</h2>
 
           <p className="text-gray-400 mt-1">
-            Analyze resumes, compare job descriptions,
-            improve ATS scores and generate optimized resumes using Gemini AI.
+            Analyze resumes, compare job descriptions, improve ATS scores and
+            generate optimized resumes using Gemini AI.
           </p>
         </div>
       </div>
@@ -120,22 +116,19 @@ export default function ResumeAnalyzer() {
 
       {/* Buttons */}
       <div className="flex flex-wrap gap-4">
-
         <button
           onClick={analyzeResume}
           disabled={loading}
           className="rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 px-6 py-3 font-semibold text-white hover:scale-105 transition-all duration-300 disabled:opacity-50"
         >
-         {loading ? (
-  <div className="flex items-center gap-2">
-    <span className="animate-spin">
-      ⚡
-    </span>
-    Analyzing...
-  </div>
-) : (
-  "Analyze Resume"
-)}
+          {loading ? (
+            <div className="flex items-center gap-2">
+              <span className="animate-spin">⚡</span>
+              Analyzing...
+            </div>
+          ) : (
+            "Analyze Resume"
+          )}
         </button>
 
         <button
@@ -143,9 +136,8 @@ export default function ResumeAnalyzer() {
           disabled={rewriting}
           className="rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 px-6 py-3 font-semibold text-white hover:scale-105 transition-all duration-300 disabled:opacity-50"
         >
-          {rewriting ? "Improving..." : "Improve Resume"}
+          {rewriting ? "Generating..." : "Generate LaTeX Resume"}
         </button>
-
       </div>
 
       {/* Analysis Results */}
@@ -155,20 +147,46 @@ export default function ResumeAnalyzer() {
         </div>
       )}
 
-      {/* Improved Resume */}
+      {/* ATS Optimized LaTeX Resume */}
       {improvedResume && (
         <div className="mt-10 rounded-3xl border border-cyan-500/20 bg-black/40 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-cyan-400">
+              ✨ ATS Optimized LaTeX Resume
+            </h2>
 
-          <h2 className="text-2xl font-bold mb-4 text-cyan-400">
-            ✨ Improved Resume
-          </h2>
+            <button
+              onClick={() => navigator.clipboard.writeText(improvedResume)}
+              className="
+        rounded-xl
+        bg-cyan-600
+        px-4
+        py-2
+        font-semibold
+        text-white
+        hover:bg-cyan-700
+        transition
+        "
+            >
+              Copy LaTeX
+            </button>
+          </div>
 
-          <div className="rounded-2xl bg-black/60 border border-white/10 p-5 max-h-[500px] overflow-y-auto">
-            <pre className="whitespace-pre-wrap text-gray-300 text-sm">
+          <div
+            className="
+      rounded-2xl
+      bg-black/60
+      border
+      border-white/10
+      p-5
+      max-h-[700px]
+      overflow-auto
+      "
+          >
+            <pre className="text-sm text-green-400 whitespace-pre-wrap">
               {improvedResume}
             </pre>
           </div>
-
         </div>
       )}
     </div>

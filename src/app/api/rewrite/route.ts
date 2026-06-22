@@ -6,16 +6,21 @@ export async function POST(req: NextRequest) {
     const { resumeText, jobDescription } = await req.json();
 
     const prompt = `
-You are an expert resume writer.
+You are an expert ATS Resume Writer.
 
-Rewrite the resume to:
-- Improve ATS compatibility
-- Include stronger action verbs
-- Add measurable impact where possible
-- Better align with the job description
-- Keep the resume professional
+Convert the following resume into a professional ATS-optimized LaTeX resume.
 
-Return ONLY the improved resume text.
+Requirements:
+
+- Return ONLY valid LaTeX code
+- One page ATS-friendly resume
+- Modern professional formatting
+- Improve bullet points
+- Quantify achievements where possible
+- Keep all important information
+- No explanations
+- No markdown
+- Output pure LaTeX
 
 Resume:
 ${resumeText}
@@ -29,15 +34,21 @@ ${jobDescription}
       contents: prompt,
     });
 
+    const latexResume = response.text ?? "";
+
     return NextResponse.json({
-      improvedResume: response.text,
+      improvedResume: latexResume,
     });
   } catch (error) {
     console.error(error);
 
     return NextResponse.json(
-      { error: "Failed to rewrite resume" },
-      { status: 500 }
+      {
+        error: "Failed to rewrite resume",
+      },
+      {
+        status: 500,
+      }
     );
   }
 }

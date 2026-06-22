@@ -1,7 +1,6 @@
 "use client";
 
 import jsPDF from "jspdf";
-
 import {
   CheckCircle,
   AlertTriangle,
@@ -22,25 +21,47 @@ export default function AnalysisResult({
     const doc = new jsPDF();
 
     doc.setFontSize(22);
-
-    doc.text(
-      "AI Resume Analysis Report",
-      20,
-      20
-    );
+    doc.text("AI Resume Analysis Report", 20, 20);
 
     doc.setFontSize(14);
 
-    doc.text(
-      `ATS Score: ${result.atsScore}`,
-      20,
-      40
+    doc.text(`ATS Score: ${result.atsScore}`, 20, 40);
+    doc.text(`Job Match: ${result.jobMatch}%`, 20, 50);
+
+    let y = 70;
+
+    doc.text("Suggestions:", 20, y);
+    y += 10;
+
+    result.suggestions?.forEach(
+      (item: string) => {
+        doc.text(`• ${item}`, 25, y);
+        y += 8;
+      }
     );
 
-    doc.text(
-      `Job Match: ${result.jobMatch}%`,
-      20,
-      50
+    y += 10;
+
+    doc.text("Missing Skills:", 20, y);
+    y += 10;
+
+    result.missingSkills?.forEach(
+      (item: string) => {
+        doc.text(`• ${item}`, 25, y);
+        y += 8;
+      }
+    );
+
+    y += 10;
+
+    doc.text("Keywords To Add:", 20, y);
+    y += 10;
+
+    result.keywordsToAdd?.forEach(
+      (item: string) => {
+        doc.text(`• ${item}`, 25, y);
+        y += 8;
+      }
     );
 
     doc.save("ATS-Report.pdf");
@@ -49,9 +70,8 @@ export default function AnalysisResult({
   return (
     <div className="mt-10 space-y-8">
       {/* Top Metrics */}
-
       <div className="grid lg:grid-cols-2 gap-6">
-        <ATSGauge score={result.atsScore} />
+        <ATSGauge score={result.atsScore || 0} />
 
         <div className="rounded-3xl border border-white/10 bg-[#111118] p-8 flex flex-col justify-center">
           <div className="flex items-center gap-2">
@@ -73,31 +93,31 @@ export default function AnalysisResult({
           <button
             onClick={downloadReport}
             className="
-            mt-8
-            rounded-xl
-            bg-gradient-to-r
-            from-green-600
-            to-emerald-600
-            px-5
-            py-3
-            font-semibold
-            hover:scale-105
-            transition
+              mt-8
+              rounded-xl
+              bg-gradient-to-r
+              from-green-600
+              to-emerald-600
+              px-5
+              py-3
+              font-semibold
+              hover:scale-105
+              transition
             "
           >
-            Download PDF Report
+            Download ATS Report
           </button>
         </div>
       </div>
 
       {/* Analysis Cards */}
-
       <div className="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
         <ResultCard
           title="Strengths"
-          icon={<CheckCircle className="text-green-400" />}
+          icon={
+            <CheckCircle className="text-green-400" />
+          }
           items={result.strengths}
-          color="green"
         />
 
         <ResultCard
@@ -106,28 +126,38 @@ export default function AnalysisResult({
             <AlertTriangle className="text-yellow-400" />
           }
           items={result.weaknesses}
-          color="yellow"
         />
 
         <ResultCard
           title="Suggestions"
-          icon={<Lightbulb className="text-cyan-400" />}
+          icon={
+            <Lightbulb className="text-cyan-400" />
+          }
           items={result.suggestions}
-          color="cyan"
+        />
+
+        <ResultCard
+          title="Matched Skills"
+          icon={
+            <CheckCircle className="text-emerald-400" />
+          }
+          items={result.matchedSkills}
         />
 
         <ResultCard
           title="Missing Skills"
-          icon={<Target className="text-red-400" />}
+          icon={
+            <Target className="text-red-400" />
+          }
           items={result.missingSkills}
-          color="red"
         />
 
         <ResultCard
           title="Keywords To Add"
-          icon={<Target className="text-violet-400" />}
+          icon={
+            <Target className="text-violet-400" />
+          }
           items={result.keywordsToAdd}
-          color="violet"
         />
       </div>
     </div>
@@ -142,7 +172,6 @@ function ResultCard({
   title: string;
   icon: React.ReactNode;
   items?: string[];
-  color: string;
 }) {
   return (
     <div className="rounded-3xl border border-white/10 bg-[#111118] p-6">
@@ -165,7 +194,7 @@ function ResultCard({
             </li>
           ))
         ) : (
-          <li className="text-gray-400">
+          <li className="text-gray-500">
             No data available
           </li>
         )}
