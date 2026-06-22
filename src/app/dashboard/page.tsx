@@ -23,7 +23,7 @@ export default async function DashboardPage() {
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto">
         <div className="max-w-7xl mx-auto px-6 md:px-10 py-8">
-          {/* <Navbar /> */}
+          <Navbar />
 
           {/* Welcome Header */}
           <div className="mb-8">
