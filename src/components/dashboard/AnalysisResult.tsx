@@ -165,7 +165,7 @@ function ResultCard({
             </li>
           ))
         ) : (
-          <li className="text-gray-500">
+          <li className="text-gray-400">
             No data available
           </li>
         )}
