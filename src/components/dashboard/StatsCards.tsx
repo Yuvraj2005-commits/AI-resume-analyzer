@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { TrendingUp, Target, FileText } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function StatsCards() {
   const [stats, setStats] = useState({
@@ -14,11 +15,20 @@ export default function StatsCards() {
     async function loadStats() {
       try {
         const res = await fetch("/api/stats");
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch stats");
+        }
+
         const data = await res.json();
 
-        setStats(data);
+        setStats({
+          totalAnalyses: data.totalAnalyses || 0,
+          bestScore: data.bestScore || 0,
+          avgMatch: data.avgMatch || 0,
+        });
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
 
@@ -48,36 +58,89 @@ export default function StatsCards() {
 
   return (
     <div className="grid gap-6 md:grid-cols-3">
-      {cards.map((card) => {
+      {cards.map((card, index) => {
         const Icon = card.icon;
 
         return (
-          <div
+          <motion.div
             key={card.title}
-            className="group relative overflow-hidden rounded-3xl border border-white/10 bg-[#111118] p-8 transition-all duration-300 hover:scale-[1.02] hover:border-white/20"
+            initial={{
+              opacity: 0,
+              y: 20,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.5,
+              delay: index * 0.1,
+            }}
+            whileHover={{
+              scale: 1.03,
+            }}
+            whileTap={{
+              scale: 0.98,
+            }}
+            className="
+              group
+              relative
+              overflow-hidden
+              rounded-3xl
+              border
+              border-white/10
+              bg-[#111118]
+              p-8
+              transition-all
+              duration-300
+              hover:border-white/20
+            "
           >
             <div
-              className={`absolute top-0 right-0 h-28 w-28 rounded-full bg-gradient-to-r ${card.gradient} blur-3xl opacity-20 group-hover:opacity-40 transition`}
+              className={`
+                absolute
+                top-0
+                right-0
+                h-32
+                w-32
+                rounded-full
+                bg-gradient-to-r
+                ${card.gradient}
+                blur-3xl
+                opacity-20
+                group-hover:opacity-40
+                transition
+              `}
             />
 
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between relative z-10">
               <div>
                 <p className="text-gray-400 text-sm">
                   {card.title}
                 </p>
 
-                <h2 className="mt-3 text-5xl font-bold">
+                <h2 className="mt-3 text-5xl font-bold text-white">
                   {card.value}
                 </h2>
               </div>
 
               <div
-                className={`h-16 w-16 rounded-2xl bg-gradient-to-r ${card.gradient} flex items-center justify-center shadow-lg`}
+                className={`
+                  h-16
+                  w-16
+                  rounded-2xl
+                  bg-gradient-to-r
+                  ${card.gradient}
+                  flex
+                  items-center
+                  justify-center
+                  shadow-lg
+                `}
               >
                 <Icon className="h-8 w-8 text-white" />
               </div>
             </div>
-          </div>
+          </motion.div>
         );
       })}
     </div>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import AnalysisResult from "./AnalysisResult";
 import { Sparkles, FileText, Wand2 } from "lucide-react";
 
+
 export default function ResumeAnalyzer() {
   const [resumeText, setResumeText] = useState("");
   const [jobDescription, setJobDescription] = useState("");
@@ -125,7 +126,16 @@ export default function ResumeAnalyzer() {
           disabled={loading}
           className="rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 px-6 py-3 font-semibold text-white hover:scale-105 transition-all duration-300 disabled:opacity-50"
         >
-          {loading ? "Analyzing..." : "Analyze Resume"}
+         {loading ? (
+  <div className="flex items-center gap-2">
+    <span className="animate-spin">
+      ⚡
+    </span>
+    Analyzing...
+  </div>
+) : (
+  "Analyze Resume"
+)}
         </button>
 
         <button
