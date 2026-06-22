@@ -5,12 +5,22 @@ import { signIn } from "next-auth/react";
 export default function LoginButton() {
   return (
     <button
-      onClick={() => signIn("google", {
-        callbackUrl: "/dashboard",
-      })}
-      className="bg-black text-white px-4 py-2 rounded"
+      onClick={() =>
+        signIn("google", {
+          callbackUrl: "/dashboard",
+        })
+      }
+      className="
+      px-5
+      py-2
+      rounded-xl
+      border
+      border-zinc-700
+      hover:bg-zinc-900
+      transition
+      "
     >
-      Sign In With Google
+      Continue with Google
     </button>
   );
 }

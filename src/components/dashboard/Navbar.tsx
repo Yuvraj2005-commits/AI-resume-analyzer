@@ -1,85 +1,48 @@
+import Link from "next/link";
 import { auth } from "@/auth";
-import LogoutButton from "@/components/LogoutButton";
-import { Bell, Search } from "lucide-react";
+import LoginButton from "@/components/LoginButton";
 
 export default async function Navbar() {
   const session = await auth();
 
   return (
-    <div className="flex items-center justify-between gap-3 mb-8">
-      {/* Search */}
-      <div className="relative flex-1 max-w-md">
-        <Search
-          className="absolute left-4 top-3 text-gray-500"
-          size={18}
-        />
-
-        <input
-          placeholder="Search..."
-          className="
-          w-full
-          rounded-xl
-          bg-[#111118]
-          border
-          border-white/10
-          py-3
-          pl-11
-          pr-4
-          text-white
-          focus:outline-none
-          focus:ring-2
-          focus:ring-violet-500
-          "
-        />
-      </div>
-
-      {/* Right */}
-      <div className="flex items-center gap-2 md:gap-4">
-        <button
-          className="
-          w-11
-          h-11
-          rounded-xl
-          bg-[#111118]
-          border
-          border-white/10
-          flex
-          items-center
-          justify-center
-          "
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-black/70 backdrop-blur-xl">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <Link
+          href="/"
+          className="text-3xl font-bold"
         >
-          <Bell size={18} />
-        </button>
+          Resume
+          <span className="text-violet-500">
+            AI
+          </span>
+        </Link>
 
-        <img
-          src={
-            session?.user?.image ||
-            "https://ui-avatars.com/api/?name=User"
-          }
-          alt="avatar"
-          className="
-          w-10
-          h-10
-          md:w-12
-          md:h-12
-          rounded-full
-          border
-          border-violet-500
-          "
-        />
+        <nav className="hidden md:flex gap-8 text-zinc-400">
+          <a href="#features">Features</a>
+          <a href="#about">About</a>
+        </nav>
 
-        <div className="hidden lg:block">
-          <p className="font-medium text-sm">
-            {session?.user?.name}
-          </p>
-
-          <p className="text-xs text-gray-500">
-            {session?.user?.email}
-          </p>
+        <div className="flex items-center gap-3">
+          {session?.user ? (
+            <Link
+              href="/dashboard"
+              className="
+              px-5
+              py-2
+              rounded-xl
+              bg-violet-600
+              hover:bg-violet-700
+              transition
+              "
+            >
+              Dashboard
+            </Link>
+          ) : (
+            <LoginButton />
+          )}
         </div>
-
-        <LogoutButton />
       </div>
-    </div>
+    </header>
   );
 }
