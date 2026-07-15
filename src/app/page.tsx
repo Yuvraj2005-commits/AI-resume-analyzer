@@ -16,12 +16,12 @@ export default function Home() {
           </div>
 
           <div className="flex gap-3">
-            <Link
+            {/* <Link
               href="/history"
-              className="text-zinc-400 hover:text-white transition"
+              className="text-zinc-300 hover:text-white transition"
             >
               History
-            </Link>
+            </Link> */}
 
             <Link
               href="/dashboard"
