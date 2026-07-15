@@ -1,36 +1,214 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ResumeAI
 
-## Getting Started
+<div align="center">
 
-First, run the development server:
+### AI-Powered Resume Analyzer & ATS Optimizer
+
+Analyze resumes, compare them against job descriptions, improve ATS compatibility, and generate ATS-friendly LaTeX resumes using Google Gemini AI.
+
+**Live Demo:** https://ai-resume-analyzer-52.vercel.app
+
+</div>
+
+---
+
+## Overview
+
+ResumeAI is a full-stack AI application that helps job seekers optimize their resumes for Applicant Tracking Systems (ATS).
+
+The application analyzes resumes, compares them with job descriptions, provides actionable feedback, identifies missing skills, suggests important keywords, and generates an ATS-friendly LaTeX version of the resume.
+
+---
+
+## Features
+
+* Google Authentication (Auth.js)
+* ATS Score Analysis
+* Job Description Matching
+* Resume Strength & Weakness Analysis
+* Missing Skills Detection
+* Keyword Recommendations
+* AI Resume Suggestions
+* ATS Report Export (PDF)
+* ATS-Friendly LaTeX Resume Generation
+* Resume Analysis History
+* Responsive Dashboard
+* Modern UI with Tailwind CSS
+
+---
+
+## Tech Stack
+
+### Frontend
+
+* Next.js 16
+* React 19
+* Tailwind CSS
+* Framer Motion
+* Lucide React
+
+### Backend
+
+* Next.js App Router
+* MongoDB Atlas
+* Mongoose
+* Auth.js
+
+### AI
+
+* Google Gemini 2.5 Flash
+
+### Deployment
+
+* Vercel
+
+---
+
+## Screenshots
+
+### Landing Page
+
+<p align="center">
+<img src="./screenshot/landing.png" width="900"/>
+</p>
+
+---
+
+### Dashboard
+
+<p align="center">
+<img src="./screenshot/dashboard.png" width="900"/>
+</p>
+
+---
+
+### Analysis History
+
+<p align="center">
+<img src="./screenshot/history.png" width="900"/>
+</p>
+
+---
+
+### User Profile
+
+<p align="center">
+<img src="./screenshot/profile.png" width="900"/>
+</p>
+
+---
+
+## Installation
+
+Clone the repository
+
+```bash
+git clone https://github.com/Yuvraj2005-commits/AI-resume-analyzer.git
+```
+
+Move into the project
+
+```bash
+cd ai-resume-analyzer
+```
+
+Install dependencies
+
+```bash
+npm install
+```
+
+Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## Environment Variables
 
-To learn more about Next.js, take a look at the following resources:
+Create a `.env.local` file.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```env
+GOOGLE_GENERATIVE_AI_API_KEY=
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+AUTH_SECRET=
 
-## Deploy on Vercel
+AUTH_GOOGLE_ID=
+AUTH_GOOGLE_SECRET=
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+MONGODB_URI=
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+NEXTAUTH_URL=http://localhost:3000
+```
+
+---
+
+## Project Structure
+
+```
+src/
+│
+├── app/
+│   ├── api/
+│   ├── dashboard/
+│   ├── history/
+│   ├── profile/
+│   └── rewrite/
+│
+├── components/
+│   ├── dashboard/
+│   └── ui/
+│
+├── lib/
+│
+├── models/
+│
+└── auth.ts
+```
+
+---
+
+## AI Analysis Includes
+
+* ATS Score
+* Job Match Percentage
+* Strengths
+* Weaknesses
+* Resume Suggestions
+* Missing Skills
+* Keyword Recommendations
+* ATS-Friendly LaTeX Resume Generation
+
+---
+
+## Future Improvements
+
+* Resume PDF Upload
+* DOCX Resume Support
+* Cover Letter Generator
+* Resume Templates
+* Multiple Resume Management
+* LinkedIn Profile Analysis
+* AI Interview Preparation
+
+---
+
+## Author
+
+**Yuvraj Prakash**
+
+GitHub: https://github.com/Yuvraj2005-commits
+
+LinkedIn: https://linkedin.com/in/yuvraj-prakash
+
+---
+
+If you found this project useful, consider giving it a star.
