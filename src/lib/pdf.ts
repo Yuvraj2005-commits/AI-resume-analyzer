@@ -1,4 +1,7 @@
-import * as pdfjsLib from "pdfjs-dist";
+// The default "generic" pdfjs-dist build assumes a browser DOM (DOMMatrix,
+// etc). Server-side (Next.js API routes run in Node), pdfjs-dist requires
+// the "legacy" Node-compatible build instead.
+import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs";
 
 export async function extractPdfText(buffer: Buffer) {
   const uint8Array = new Uint8Array(buffer);
@@ -15,7 +18,7 @@ export async function extractPdfText(buffer: Buffer) {
     const content = await page.getTextContent();
 
     text += content.items
-      .map((item: any) => item.str)
+      .map((item) => ("str" in item ? item.str : ""))
       .join(" ");
   }
 

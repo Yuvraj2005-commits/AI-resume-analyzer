@@ -6,36 +6,35 @@ import {
 } from "react-circular-progressbar";
 
 import "react-circular-progressbar/dist/styles.css";
+import { Panel } from "@/components/ui/panel";
 
 interface Props {
   score: number;
 }
 
-export default function ATSGauge({
-  score,
-}: Props) {
-  return (
-    <div className="rounded-3xl border border-white/10 bg-[#111118] p-8">
-      <h2 className="text-xl font-semibold mb-6">
-        ATS Score
-      </h2>
+export default function ATSGauge({ score }: Props) {
+  const color = score >= 80 ? "#22c55e" : score >= 50 ? "#8b5cf6" : "#ef4444";
 
-      <div className="w-52 h-52 mx-auto">
+  return (
+    <Panel>
+      <h2 className="mb-6 text-xl font-semibold">ATS Score</h2>
+
+      <div className="mx-auto h-52 w-52">
         <CircularProgressbar
           value={score}
           text={`${score}`}
           styles={buildStyles({
-            pathColor: "#8b5cf6",
-            trailColor: "#27272a",
+            pathColor: color,
+            trailColor: "rgba(255,255,255,0.08)",
             textColor: "#ffffff",
             textSize: "18px",
           })}
         />
       </div>
 
-      <p className="text-center text-gray-400 mt-6">
+      <p className="mt-6 text-center text-muted-foreground">
         Resume optimization score
       </p>
-    </div>
+    </Panel>
   );
 }

@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { TrendingUp, Target, FileText } from "lucide-react";
+import { TrendingUp, Target, FileText, Crown } from "lucide-react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 export default function StatsCards() {
   const [stats, setStats] = useState({
@@ -10,6 +11,13 @@ export default function StatsCards() {
     bestScore: 0,
     avgMatch: 0,
   });
+
+  const [usage, setUsage] = useState<{
+    plan: "free" | "pro";
+    used: number;
+    limit: number | null;
+    remaining: number | null;
+  } | null>(null);
 
   useEffect(() => {
     async function loadStats() {
@@ -32,7 +40,18 @@ export default function StatsCards() {
       }
     }
 
+    async function loadUsage() {
+      try {
+        const res = await fetch("/api/usage");
+        if (!res.ok) return;
+        setUsage(await res.json());
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
     loadStats();
+    loadUsage();
   }, []);
 
   const cards = [
@@ -54,10 +73,17 @@ export default function StatsCards() {
       icon: FileText,
       gradient: "from-emerald-600 to-green-500",
     },
+    {
+      title: "Plan",
+      value: usage?.plan === "pro" ? "Pro" : `Free (${usage?.remaining ?? "–"} left)`,
+      icon: Crown,
+      gradient: "from-amber-500 to-orange-500",
+      href: usage?.plan === "pro" ? undefined : "/pricing",
+    },
   ];
 
   return (
-    <div className="grid gap-6 md:grid-cols-3">
+    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
       {cards.map((card, index) => {
         const Icon = card.icon;
 
@@ -88,14 +114,17 @@ export default function StatsCards() {
               overflow-hidden
               rounded-3xl
               border
-              border-white/10
-              bg-[#111118]
+              border-border
+              bg-card
               p-8
               transition-all
               duration-300
               hover:border-white/20
             "
           >
+            {card.href && (
+              <Link href={card.href} className="absolute inset-0 z-20" aria-label={`Manage ${card.title}`} />
+            )}
             <div
               className={`
                 absolute
@@ -115,11 +144,17 @@ export default function StatsCards() {
 
             <div className="flex items-center justify-between relative z-10">
               <div>
-                <p className="text-gray-400 text-sm">
+                <p className="text-sm text-muted-foreground">
                   {card.title}
                 </p>
 
-                <h2 className="mt-3 text-5xl font-bold text-white">
+                <h2
+                  className={`mt-3 font-bold text-foreground ${
+                    typeof card.value === "string" && card.value.length > 6
+                      ? "text-2xl"
+                      : "text-5xl"
+                  }`}
+                >
                   {card.value}
                 </h2>
               </div>

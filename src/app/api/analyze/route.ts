@@ -3,10 +3,39 @@ import { ai } from "@/lib/gemini";
 import Analysis from "@/models/Analysis";
 import { connectDB } from "@/lib/mongodb";
 import { auth } from "@/auth";
+import { getUsageSummary } from "@/lib/plans";
 
 export async function POST(req: NextRequest) {
   try {
+    const session = await auth();
+
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { resumeText, jobDescription } = await req.json();
+
+    if (!resumeText?.trim() || !jobDescription?.trim()) {
+      return NextResponse.json(
+        { error: "Resume and job description are both required" },
+        { status: 400 }
+      );
+    }
+
+    await connectDB();
+
+    const usage = await getUsageSummary(session.user.email);
+
+    if (usage.plan === "free" && usage.remaining !== null && usage.remaining <= 0) {
+      return NextResponse.json(
+        {
+          error: "limit_reached",
+          message: `You've used all ${usage.limit} free analyses this month. Upgrade to Pro for unlimited analyses.`,
+          usage,
+        },
+        { status: 403 }
+      );
+    }
 
     const prompt = `
 You are an expert ATS Resume Analyzer and Recruiter.
@@ -66,15 +95,20 @@ ${jobDescription}
 
     const text = response.text ?? "{}";
 
-    console.log("Gemini Response:");
-    console.log(text);
+    let result;
 
-    const result = JSON.parse(text);
-    await connectDB();
-    const session = await auth();
+    try {
+      result = JSON.parse(text);
+    } catch {
+      console.error("Gemini returned non-JSON output:", text);
+      return NextResponse.json(
+        { error: "The AI response couldn't be parsed. Please try again." },
+        { status: 502 }
+      );
+    }
 
     await Analysis.create({
-      userEmail: session?.user?.email,
+      userEmail: session.user.email,
       atsScore: result.atsScore,
       jobMatch: result.jobMatch,
       strengths: result.strengths,

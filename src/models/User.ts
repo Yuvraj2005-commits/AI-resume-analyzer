@@ -8,6 +8,11 @@ const UserSchema = new mongoose.Schema(
       unique: true,
     },
     image: String,
+    plan: {
+      type: String,
+      enum: ["free", "pro"],
+      default: "free",
+    },
   },
   {
     timestamps: true,

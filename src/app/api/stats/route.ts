@@ -4,12 +4,16 @@ import Analysis from "@/models/Analysis";
 import { connectDB } from "@/lib/mongodb";
 
 export async function GET() {
-  await connectDB();
-
   const session = await auth();
 
+  if (!session?.user?.email) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  await connectDB();
+
   const analyses = await Analysis.find({
-    userEmail: session?.user?.email,
+    userEmail: session.user.email,
   });
 
   if (analyses.length === 0) {

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import Analysis from "@/models/Analysis";
-import { connectDB } from "@/lib/mongodb";
 import { auth } from "@/auth";
+import { connectDB } from "@/lib/mongodb";
+import { getUsageSummary } from "@/lib/plans";
 
 export async function GET() {
   const session = await auth();
@@ -12,9 +12,7 @@ export async function GET() {
 
   await connectDB();
 
-  const analyses = await Analysis.find({
-    userEmail: session.user.email,
-  }).sort({ createdAt: -1 });
+  const usage = await getUsageSummary(session.user.email);
 
-  return NextResponse.json(analyses);
+  return NextResponse.json(usage);
 }

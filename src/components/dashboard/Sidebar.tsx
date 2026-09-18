@@ -7,9 +7,9 @@ import { usePathname } from "next/navigation";
 import {
   Sparkles,
   LayoutDashboard,
-  FileText,
   History,
   User,
+  CreditCard,
 } from "lucide-react";
 
 const menuItems = [
@@ -17,11 +17,6 @@ const menuItems = [
     name: "Dashboard",
     href: "/dashboard",
     icon: LayoutDashboard,
-  },
-  {
-    name: "Analyze",
-    href: "/dashboard",
-    icon: FileText,
   },
   {
     name: "History",
@@ -33,49 +28,50 @@ const menuItems = [
     href: "/profile",
     icon: User,
   },
+  {
+    name: "Pricing",
+    href: "/pricing",
+    icon: CreditCard,
+  },
 ];
 
 export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden md:flex w-72 min-h-screen bg-[#09090f] border-r border-white/10 flex-col">
+    <aside className="hidden min-h-screen w-72 flex-col border-r border-sidebar-border bg-sidebar md:flex">
       {/* Logo */}
-      <div className="px-8 py-8 border-b border-white/10">
+      <Link href="/" className="border-b border-sidebar-border px-8 py-8">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-r from-violet-600 to-cyan-500 flex items-center justify-center">
-            <Sparkles className="w-6 h-6 text-white" />
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-r from-violet-600 to-cyan-500">
+            <Sparkles className="h-6 w-6 text-white" />
           </div>
 
           <div>
-            <h1 className="text-2xl font-bold text-white">ResumeAI</h1>
-
-            <p className="text-xs text-gray-500">Career Intelligence</p>
+            <h1 className="text-2xl font-bold text-foreground">ResumeAI</h1>
+            <p className="text-xs text-muted-foreground">Career Intelligence</p>
           </div>
         </div>
-      </div>
+      </Link>
 
       {/* Navigation */}
       <nav className="flex-1 px-4 py-8">
         <div className="space-y-2">
           {menuItems.map((item) => {
             const Icon = item.icon;
-
             const active = pathname === item.href;
 
             return (
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center gap-4 px-4 py-4 rounded-xl transition-all duration-300
-                ${
+                className={`flex items-center gap-4 rounded-xl px-4 py-4 transition-all duration-300 ${
                   active
-                    ? "bg-gradient-to-r from-violet-600/20 to-cyan-500/20 border border-violet-500/30 text-white"
-                    : "text-gray-400 hover:bg-white/5 hover:text-white"
+                    ? "border border-violet-500/30 bg-gradient-to-r from-violet-600/20 to-cyan-500/20 text-foreground"
+                    : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
                 }`}
               >
                 <Icon size={22} />
-
                 <span className="font-medium">{item.name}</span>
               </Link>
             );
@@ -85,21 +81,19 @@ export default function Sidebar() {
 
       {/* Bottom Card */}
       <div className="p-5">
-        <div className="rounded-2xl bg-gradient-to-br from-violet-600 to-cyan-500 p-5">
-          <h3 className="font-bold text-lg">ResumeAI Pro</h3>
-
-          <p className="text-sm text-white/80 mt-2">
-            Improve ATS scores and get AI-powered resume insights.
+        <Link
+          href="/pricing"
+          className="block rounded-2xl bg-gradient-to-br from-violet-600 to-cyan-500 p-5 transition hover:brightness-110"
+        >
+          <h3 className="text-lg font-bold text-white">ResumeAI Pro</h3>
+          <p className="mt-2 text-sm text-white/80">
+            Unlimited analyses and AI resume rewrites.
           </p>
-        </div>
+        </Link>
       </div>
-      <div className="flex flex-col h-screen">
-        {/* Logo */}
-        {/* Navigation */}
 
-        <div className="mt-auto p-6 border-t border-white/10">
-          <LogoutButton />
-        </div>
+      <div className="border-t border-sidebar-border p-6">
+        <LogoutButton />
       </div>
     </aside>
   );

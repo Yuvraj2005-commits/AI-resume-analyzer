@@ -29,9 +29,12 @@ The application analyzes resumes, compares them with job descriptions, provides 
 * Missing Skills Detection
 * Keyword Recommendations
 * AI Resume Suggestions
+* PDF Resume Upload (drag & drop, auto-parsed)
 * ATS Report Export (PDF)
-* ATS-Friendly LaTeX Resume Generation
-* Resume Analysis History
+* ATS-Friendly LaTeX Resume Generation (Pro)
+* Resume Analysis History (per-account, private)
+* Free / Pro Plans with Monthly Usage Limits
+* Pricing Page & Upgrade Flow
 * Responsive Dashboard
 * Modern UI with Tailwind CSS
 
@@ -149,6 +152,10 @@ MONGODB_URI=
 NEXTAUTH_URL=http://localhost:3000
 ```
 
+> No Stripe/payment keys are required — the Pro plan is currently a functional
+> usage-gated freemium flow (see [Plans & Billing](#plans--billing)), not live
+> payment collection.
+
 ---
 
 ## Project Structure
@@ -189,9 +196,22 @@ src/
 
 ---
 
+## Plans & Billing
+
+ResumeAI ships with a real (not cosmetic) freemium model:
+
+* **Free** — 3 resume analyses per calendar month, full ATS report, PDF export.
+* **Pro** — unlimited analyses + AI LaTeX resume rewrites.
+
+Usage is tracked per account from existing `Analysis` records (`src/lib/plans.ts`)
+and enforced server-side in `POST /api/analyze` and `POST /api/rewrite`. There's
+no payment processor wired up yet, so "Upgrade to Pro" on `/pricing` captures an
+upgrade request (`UpgradeRequest` model) instead of charging a card — swap that
+for real Stripe Checkout once API keys are available.
+
 ## Future Improvements
 
-* Resume PDF Upload
+* Stripe Checkout for real Pro billing
 * DOCX Resume Support
 * Cover Letter Generator
 * Resume Templates
